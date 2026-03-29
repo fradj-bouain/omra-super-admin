@@ -1,0 +1,11 @@
+# Railway deploy : Node sert le build Angular (sans Docker / Nginx)
+# Dans le dashboard Railway : définir « Root Directory » sur admin-omra si le dépôt est à la racine du mono-repo.
+
+[build]
+builder = "nixpacks"
+buildCommand = "npm run build"
+
+[deploy]
+startCommand = "npm start"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
