@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, of } from 'rxjs';
@@ -28,7 +28,11 @@ export class AuthService {
   private readonly admin = signal<AdminUser | null>(this.readAdmin());
 
   readonly currentAdmin = this.admin.asReadonly();
-  readonly isLoggedIn = computed(() => !!this.getToken());
+
+  /** Ne pas utiliser computed(localStorage) : sans signal, la valeur ne se met jamais à jour après login. */
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
 
   constructor(
     private http: HttpClient,
