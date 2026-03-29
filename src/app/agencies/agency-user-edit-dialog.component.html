@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>Modifier l’utilisateur</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form">
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" autocomplete="off" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Téléphone</mat-label>
+      <input matInput formControlName="phone" />
+    </mat-form-field>
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Rôle</mat-label>
+        <mat-select formControlName="role">
+          @for (r of roles; track r.value) {
+            <mat-option [value]="r.value">{{ r.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Statut</mat-label>
+        <mat-select formControlName="status">
+          @for (s of statuses; track s.value) {
+            <mat-option [value]="s.value">{{ s.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Nouveau mot de passe</mat-label>
+      <input matInput type="password" formControlName="password" autocomplete="new-password" />
+      <mat-hint>Laisser vide pour ne pas changer</mat-hint>
+    </mat-form-field>
+    <mat-slide-toggle formControlName="emailVerified">Email vérifié</mat-slide-toggle>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Annuler</button>
+  <button mat-flat-button color="primary" type="button" [disabled]="form.invalid || loading" (click)="save()">
+    {{ loading ? '…' : 'Enregistrer' }}
+  </button>
+</mat-dialog-actions>

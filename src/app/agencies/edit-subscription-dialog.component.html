@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Modifier l’abonnement</h2>
+<p class="sub">{{ data.agencyName }} · {{ data.sub.planName }} ({{ data.sub.planCode }})</p>
+<mat-dialog-content>
+  <p class="hint">
+    Changer le statut en <strong>Annulé</strong> désactive l’abonnement. Remettre <strong>Actif</strong> avec
+    <strong>Payé</strong> réactive l’accès si la période couvre aujourd’hui ; les autres abonnements actifs ou en attente
+    seront alors annulés automatiquement.
+  </p>
+  <form [formGroup]="form" class="form">
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Date de début</mat-label>
+        <input matInput type="date" formControlName="periodStart" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Date de fin</mat-label>
+        <input matInput type="date" formControlName="periodEnd" />
+      </mat-form-field>
+    </div>
+    @if (form.errors?.['periodOrder']) {
+      <p class="error-text">La date de fin doit être après ou égale au début.</p>
+    }
+    @if (periodSummary(); as summary) {
+      <p class="summary">{{ summary }}</p>
+    }
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Statut</mat-label>
+      <mat-select formControlName="status">
+        @for (st of statusOptions; track st) {
+          <mat-option [value]="st">{{ statusLabel(st) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="markAsPaid">Marquer comme payé</mat-slide-toggle>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Référence de paiement</mat-label>
+      <input matInput formControlName="paymentReference" />
+    </mat-form-field>
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Montant payé</mat-label>
+        <input matInput type="text" formControlName="amountPaid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Devise</mat-label>
+        <input matInput formControlName="currency" />
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Notes internes</mat-label>
+      <textarea matInput formControlName="notes" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Fermer</button>
+  <button mat-flat-button color="primary" type="button" [disabled]="form.invalid || saving" (click)="submit()">
+    {{ saving ? '…' : 'Enregistrer' }}
+  </button>
+</mat-dialog-actions>

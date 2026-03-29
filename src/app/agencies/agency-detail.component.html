@@ -1,0 +1,228 @@
+@if (loading && !agency) {
+  <p class="muted">Chargement…</p>
+} @else if (agency) {
+  <div class="head">
+    <div class="head__text">
+      <a routerLink="/agencies" class="back">
+        <mat-icon>arrow_back</mat-icon>
+        Agences
+      </a>
+      <h1>{{ agency.name }}</h1>
+      <p class="lead">{{ agency.email }} · {{ agency.city || '—' }} · {{ statusLabel(agency.status) }}</p>
+    </div>
+    <div class="head__actions">
+      <a mat-stroked-button [routerLink]="['/agencies', agency.id, 'edit']">
+        <mat-icon>edit</mat-icon>
+        Modifier l’agence
+      </a>
+    </div>
+  </div>
+
+  @if (metrics) {
+    <div class="metric-row">
+      <article class="metric">
+        <mat-icon>person</mat-icon>
+        <div>
+          <span class="metric__v">{{ metrics.userCount }}</span>
+          <span class="metric__l">Utilisateurs</span>
+        </div>
+      </article>
+      <article class="metric">
+        <mat-icon>hiking</mat-icon>
+        <div>
+          <span class="metric__v">{{ metrics.pilgrimCount }}</span>
+          <span class="metric__l">Pèlerins</span>
+        </div>
+      </article>
+      <article class="metric">
+        <mat-icon>flight_takeoff</mat-icon>
+        <div>
+          <span class="metric__v">{{ metrics.groupCount }}</span>
+          <span class="metric__l">Groupes</span>
+        </div>
+      </article>
+      <article class="metric metric--accent">
+        <mat-icon>payments</mat-icon>
+        <div>
+          <span class="metric__v">{{ formatMoney(metrics.revenuePaid) }}</span>
+          <span class="metric__l">Encaissements payés</span>
+        </div>
+      </article>
+    </div>
+  }
+
+  <mat-card class="card-block subscription-card">
+    <div class="card-block__head">
+      <h2>Abonnement</h2>
+      <button mat-flat-button color="primary" type="button" (click)="openAssignSubscription()">
+        <mat-icon>add_card</mat-icon>
+        Affecter / renouveler
+      </button>
+    </div>
+    <p class="subscription-lead">
+      Sans abonnement <strong>payé</strong> et <strong>en cours</strong>, les utilisateurs de cette agence ne peuvent pas se connecter.
+    </p>
+    @if (subscriptionSummary?.currentValid; as cur) {
+      <div class="sub-banner sub-banner--ok">
+        <div class="sub-banner__main">
+          <mat-icon>verified</mat-icon>
+          <div>
+            <span class="sub-banner__title">Couverture active</span>
+            <span class="sub-banner__meta"
+              >{{ cur.planName }} · {{ cur.periodStart }} → {{ cur.periodEnd }} · {{ subStatusLabel(cur.status) }}</span
+            >
+          </div>
+        </div>
+        <div class="sub-banner__actions">
+          <button mat-stroked-button type="button" (click)="openEditSubscription(cur)">
+            <mat-icon>edit</mat-icon>
+            Modifier période / statut
+          </button>
+          @if (canDeactivateSub(cur)) {
+            <button mat-stroked-button type="button" class="btn-warn-outline" (click)="deactivateSubscription(cur)">
+              <mat-icon>block</mat-icon>
+              Désactiver (annuler)
+            </button>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="sub-banner sub-banner--warn">
+        <div class="sub-banner__main">
+          <mat-icon>warning</mat-icon>
+          <div>
+            <span class="sub-banner__title">Aucune couverture valide aujourd’hui</span>
+            <span class="sub-banner__meta">Affectez un forfait payé, modifiez les dates ou le statut d’un abonnement existant.</span>
+          </div>
+        </div>
+        @if (subscriptionSummary?.latest; as last) {
+          <div class="sub-banner__actions">
+            <button mat-stroked-button type="button" (click)="openEditSubscription(last)">
+              <mat-icon>edit</mat-icon>
+              Modifier le dernier abonnement
+            </button>
+            @if (canDeactivateSub(last)) {
+              <button mat-stroked-button type="button" class="btn-warn-outline" (click)="deactivateSubscription(last)">
+                <mat-icon>block</mat-icon>
+                Annuler
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+    @if (subscriptionSummary?.latest; as last) {
+      <div class="info-grid info-grid--tight">
+        <div><span class="label">Dernier enregistrement</span> {{ last.planName }} ({{ last.planCode }})</div>
+        <div><span class="label">Période</span> {{ last.periodStart }} → {{ last.periodEnd }}</div>
+        <div><span class="label">Statut</span> {{ subStatusLabel(last.status) }}</div>
+        <div>
+          <span class="label">Paiement</span>
+          {{ last.paidAt ? ('Payé le ' + last.paidAt) : 'Non payé' }}
+        </div>
+      </div>
+    }
+    <div class="info-grid">
+      <div><span class="label">Formule (fiche agence)</span> {{ agency.subscriptionPlan || '—' }}</div>
+      <div><span class="label">Début</span> {{ agency.subscriptionStartDate || '—' }}</div>
+      <div><span class="label">Fin</span> {{ agency.subscriptionEndDate || '—' }}</div>
+      <div><span class="label">Créée le</span> {{ agency.createdAt || '—' }}</div>
+    </div>
+
+    <h3 class="history-title">Historique récent</h3>
+    @if (historyLoading) {
+      <p class="muted">Chargement…</p>
+    } @else if (subscriptionHistory.length) {
+      <div class="history-table-wrap">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Forfait</th>
+              <th>Période</th>
+              <th>Statut</th>
+              <th>Paiement</th>
+              <th class="history-th-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (h of subscriptionHistory; track h.id) {
+              <tr>
+                <td>{{ h.planName }} <span class="hist-code">{{ h.planCode }}</span></td>
+                <td>{{ h.periodStart }} → {{ h.periodEnd }}</td>
+                <td>{{ subStatusLabel(h.status) }}</td>
+                <td>{{ h.paidAt ? 'Oui' : '—' }}</td>
+                <td class="history-actions">
+                  <button mat-icon-button type="button" (click)="openEditSubscription(h)" aria-label="Modifier l’abonnement">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  @if (canDeactivateSub(h)) {
+                    <button
+                      mat-icon-button
+                      type="button"
+                      class="icon-warn"
+                      (click)="deactivateSubscription(h)"
+                      aria-label="Annuler l’abonnement"
+                    >
+                      <mat-icon>block</mat-icon>
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <p class="muted">Aucun historique.</p>
+    }
+  </mat-card>
+
+  <mat-card class="card-block">
+    <div class="card-block__head">
+      <h2>Utilisateurs de l’agence</h2>
+      <span class="muted">{{ totalUsers }} compte(s)</span>
+    </div>
+    <div class="table-wrap">
+      <table mat-table [dataSource]="dataSource" class="full-width">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Nom</th>
+          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+        </ng-container>
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Rôle</th>
+          <td mat-cell *matCellDef="let row">{{ roleLabel(row.role) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Statut</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="pill" [class.pill--on]="row.status === 'ACTIVE'">{{ userStatusLabel(row.status) }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-icon-button type="button" (click)="editUser(row)" aria-label="Modifier">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      @if (!usersLoading && dataSource.data.length === 0) {
+        <p class="empty">Aucun utilisateur.</p>
+      }
+    </div>
+    <mat-paginator
+      [length]="totalUsers"
+      [pageSize]="userSize"
+      [pageIndex]="userPage - 1"
+      [pageSizeOptions]="[10, 15, 30, 50]"
+      (page)="onUserPage($event)"
+    ></mat-paginator>
+  </mat-card>
+}

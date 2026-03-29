@@ -1,0 +1,50 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <span class="sidebar__logo">O</span>
+      <div class="sidebar__titles">
+        <span class="sidebar__name">Omra</span>
+        <span class="sidebar__tag">Console plateforme</span>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <mat-icon>dashboard</mat-icon>
+        Tableau de bord
+      </a>
+      <a routerLink="/agencies" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item">
+        <mat-icon>apartment</mat-icon>
+        Agences
+      </a>
+      <a routerLink="/agencies/new" routerLinkActive="active" class="nav-item">
+        <mat-icon>add_business</mat-icon>
+        Nouvelle agence
+      </a>
+      <a routerLink="/subscription-plans" routerLinkActive="active" class="nav-item">
+        <mat-icon>card_membership</mat-icon>
+        Forfaits d’abonnement
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      @if (auth.currentAdmin(); as a) {
+        <div class="sidebar__user">
+          <mat-icon class="sidebar__user-icon">shield_person</mat-icon>
+          <div class="sidebar__user-text">
+            <span class="sidebar__user-name">{{ a.username }}</span>
+            <span class="sidebar__user-email">{{ a.email }}</span>
+          </div>
+        </div>
+      }
+      <button mat-stroked-button type="button" class="logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <router-outlet />
+  </div>
+</div>

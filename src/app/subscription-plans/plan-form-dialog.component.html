@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Modifier le forfait' : 'Nouveau forfait' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form">
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Code</mat-label>
+      <input matInput formControlName="code" [readonly]="isEdit" />
+      <mat-hint>Unique, majuscules (ex. STANDARD)</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Nom affiché</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Description courte</mat-label>
+      <textarea matInput formControlName="description" rows="2"></textarea>
+    </mat-form-field>
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Prix</mat-label>
+        <input matInput type="text" formControlName="price" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Devise</mat-label>
+        <input matInput formControlName="currency" />
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Facturation</mat-label>
+      <mat-select formControlName="billingPeriod">
+        @for (o of billingOptions; track o.v) {
+          <mat-option [value]="o.v">{{ o.l }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Durée par défaut (jours)</mat-label>
+        <input matInput type="number" formControlName="defaultDurationDays" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Max utilisateurs</mat-label>
+        <input matInput type="number" formControlName="maxUsers" />
+        <mat-hint>Optionnel</mat-hint>
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Fonctionnalités (texte libre)</mat-label>
+      <textarea matInput formControlName="features" rows="3"></textarea>
+    </mat-form-field>
+    <div class="row row--bottom">
+      <mat-form-field appearance="outline">
+        <mat-label>Ordre d’affichage</mat-label>
+        <input matInput type="number" formControlName="sortOrder" />
+      </mat-form-field>
+      <mat-slide-toggle formControlName="active">Forfait actif</mat-slide-toggle>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Annuler</button>
+  <button mat-flat-button color="primary" type="button" [disabled]="form.invalid || loading" (click)="save()">
+    {{ loading ? '…' : 'Enregistrer' }}
+  </button>
+</mat-dialog-actions>

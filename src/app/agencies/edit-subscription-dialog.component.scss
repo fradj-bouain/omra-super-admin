@@ -1,0 +1,57 @@
+.sub {
+  margin: -0.5rem 1.5rem 0;
+  color: var(--admin-muted);
+  font-size: 0.88rem;
+}
+
+.hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--admin-muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-top: 0.35rem;
+  min-width: min(100%, 480px);
+}
+
+.full {
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.error-text {
+  margin: -0.35rem 0 0.25rem;
+  font-size: 0.82rem;
+  color: var(--admin-danger);
+}
+
+.summary {
+  margin: 0 0 0.35rem;
+  font-size: 0.84rem;
+  color: var(--admin-accent);
+  line-height: 1.4;
+}
+
+mat-slide-toggle {
+  margin: 0.15rem 0 0.35rem;
+}
+
+mat-dialog-content {
+  max-height: 75vh;
+}

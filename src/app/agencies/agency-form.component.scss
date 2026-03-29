@@ -1,0 +1,55 @@
+.page-head {
+  margin-bottom: 1.25rem;
+}
+
+.page-head__title {
+  margin: 0.35rem 0 0;
+  font-family: var(--admin-font-display);
+  font-size: clamp(1.45rem, 2vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.back {
+  font-size: 0.85rem;
+  color: var(--admin-accent);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.form-card {
+  padding: 1.25rem 1.35rem !important;
+}
+
+.form {
+  padding-top: 0.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1rem;
+}
+
+.span-2 {
+  grid-column: span 2;
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .span-2 {
+    grid-column: span 1;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}

@@ -1,0 +1,148 @@
+<div class="page-head">
+  <div>
+    <h1 class="page-head__title">Tableau de bord</h1>
+    <p class="page-head__lead">Vue d’ensemble des agences, encaissements et dossiers visa sur la plateforme.</p>
+  </div>
+  <a mat-flat-button color="primary" routerLink="/agencies/new">
+    <mat-icon>add</mat-icon>
+    Nouvelle agence
+  </a>
+</div>
+
+@if (loading) {
+  <div class="loading">
+    <mat-progress-spinner diameter="48" mode="indeterminate" />
+  </div>
+} @else if (stats) {
+  <div class="kpi-grid">
+    <article class="kpi kpi--accent">
+      <mat-icon>apartment</mat-icon>
+      <div class="kpi__body">
+        <span class="kpi__value">{{ stats.totalAgencies ?? 0 }}</span>
+        <span class="kpi__label">Agences</span>
+        <span class="kpi__hint">{{ stats.activeAgencies ?? 0 }} actives · {{ stats.suspendedAgencies ?? 0 }} suspendues</span>
+      </div>
+    </article>
+    <article class="kpi">
+      <mat-icon>groups</mat-icon>
+      <div class="kpi__body">
+        <span class="kpi__value">{{ stats.totalAgencyUsers ?? 0 }}</span>
+        <span class="kpi__label">Comptes agents</span>
+        <span class="kpi__hint">Utilisateurs rattachés aux agences</span>
+      </div>
+    </article>
+    <article class="kpi">
+      <mat-icon>hiking</mat-icon>
+      <div class="kpi__body">
+        <span class="kpi__value">{{ stats.totalPilgrims }}</span>
+        <span class="kpi__label">Pèlerins</span>
+        <span class="kpi__hint">{{ stats.activeGroups }} groupes · {{ stats.pendingVisas }} visas en cours</span>
+      </div>
+    </article>
+    <article class="kpi kpi--money">
+      <mat-icon>payments</mat-icon>
+      <div class="kpi__body">
+        <span class="kpi__value">{{ formatMoney(stats.paymentsReceived) }}</span>
+        <span class="kpi__label">Encaissements (payés)</span>
+        <span class="kpi__hint">Somme globale toutes agences</span>
+      </div>
+    </article>
+  </div>
+
+  <div class="grid-2">
+    <mat-card class="panel">
+      <div class="panel__head">
+        <h2>Encaissements par mois</h2>
+        <span class="panel__sub">12 derniers mois</span>
+      </div>
+      @if (chart && chart.paymentsOverTime.length) {
+        <div class="bars">
+          @for (row of chart.paymentsOverTime; track row.period) {
+            <div class="bar-row">
+              <span class="bar-label">{{ row.period }}</span>
+              <div class="bar-track">
+                <div
+                  class="bar-fill"
+                  [style.width.%]="(num(row.amount) / chartMax()) * 100"
+                  [matTooltip]="formatMoney(row.amount)"
+                ></div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="empty">Pas encore de données de paiement sur la période.</p>
+      }
+    </mat-card>
+
+    <mat-card class="panel">
+      <div class="panel__head">
+        <h2>Répartition des visas</h2>
+        <span class="panel__sub">Tous pèlerins confondus</span>
+      </div>
+      @if (chart && chart.visaDistribution.length) {
+        <div class="visa-list">
+          @for (v of chart.visaDistribution; track v.status) {
+            <div class="visa-row">
+              <div class="visa-row__top">
+                <span>{{ visaLabel(v.status) }}</span>
+                <span class="visa-count">{{ v.count }}</span>
+              </div>
+              <div class="bar-track bar-track--thin">
+                <div class="bar-fill bar-fill--soft" [style.width.%]="(v.count / visaMax()) * 100"></div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="empty">Aucune donnée visa agrégée.</p>
+      }
+    </mat-card>
+  </div>
+
+  <div class="grid-2 grid-2--bottom">
+    <mat-card class="panel">
+      <div class="panel__head panel__head--row">
+        <h2>Agences récentes</h2>
+        <a mat-button color="primary" routerLink="/agencies">Tout voir</a>
+      </div>
+      <ul class="entity-list">
+        @for (a of recentAgencies; track a.id) {
+          <li>
+            <a [routerLink]="['/agencies', a.id]" class="entity-link">
+              <span class="entity-name">{{ a.name }}</span>
+              <span class="entity-meta">{{ a.city || '—' }} · {{ agencyStatusLabel(a.status) }}</span>
+            </a>
+          </li>
+        } @empty {
+          <li class="empty">Aucune agence.</li>
+        }
+      </ul>
+    </mat-card>
+
+    <mat-card class="panel">
+      <div class="panel__head">
+        <h2>Derniers paiements</h2>
+        <span class="panel__sub">Toutes agences</span>
+      </div>
+      <ul class="pay-list">
+        @for (p of recentPayments; track p.id) {
+          <li class="pay-row">
+            <div class="pay-row__main">
+              <span class="pay-amt">{{ formatMoney(p.amount, p.currency || 'MAD') }}</span>
+              <span class="pay-status" [class.pay-status--paid]="p.status === 'PAID'">{{ paymentStatusLabel(p.status) }}</span>
+            </div>
+            <div class="pay-row__sub">
+              @if (p.agencyId != null) {
+                <a [routerLink]="['/agencies', p.agencyId]">Agence #{{ p.agencyId }}</a>
+              }
+              <span>{{ p.paymentDate || '—' }}</span>
+            </div>
+          </li>
+        } @empty {
+          <li class="empty">Aucun paiement.</li>
+        }
+      </ul>
+    </mat-card>
+  </div>
+}

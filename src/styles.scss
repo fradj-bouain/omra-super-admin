@@ -1,0 +1,262 @@
+:root {
+  --admin-bg: #0c0f14;
+  --admin-surface: #141a22;
+  --admin-surface-2: #1c2430;
+  --admin-border: rgba(255, 255, 255, 0.08);
+  --admin-text: #e8eaef;
+  --admin-muted: #8b95a8;
+  --admin-accent: #3dd6c7;
+  --admin-accent-dim: rgba(61, 214, 199, 0.15);
+  --admin-warn: #f59e0b;
+  --admin-danger: #f87171;
+  --admin-radius: 14px;
+  --admin-font-display: 'Syne', system-ui, sans-serif;
+  --admin-font-body: 'DM Sans', system-ui, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body.admin-omra-body {
+  margin: 0;
+  font-family: var(--admin-font-body);
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.mat-typography h1,
+.mat-typography h2,
+.mat-typography h3 {
+  font-family: var(--admin-font-display);
+  letter-spacing: -0.02em;
+}
+
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border) !important;
+  border-radius: var(--admin-radius) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35) !important;
+}
+
+.mat-toolbar.mat-primary {
+  --mat-toolbar-container-background-color: var(--admin-surface) !important;
+  --mat-toolbar-container-text-color: var(--admin-text) !important;
+}
+
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-flat-button.mat-primary {
+  --mdc-filled-button-container-color: var(--admin-accent) !important;
+  --mdc-filled-button-label-text-color: #042a26 !important;
+}
+
+.mat-mdc-outlined-button {
+  --mdc-outlined-button-outline-color: var(--admin-border) !important;
+  --mdc-outlined-button-label-text-color: var(--admin-text) !important;
+}
+
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: var(--admin-border);
+  --mdc-outlined-text-field-hover-outline-color: rgba(61, 214, 199, 0.4);
+  --mdc-outlined-text-field-focus-outline-color: var(--admin-accent);
+  --mat-form-field-focus-select-arrow-color: var(--admin-accent);
+  /* Texte saisi lisible sur fond sombre (login, dialogs, formulaires) */
+  --mdc-outlined-text-field-input-text-color: #ffffff;
+  --mat-form-field-outlined-input-text-color: #ffffff;
+}
+
+.mat-mdc-form-field .mat-mdc-input-element,
+.mat-mdc-form-field textarea.mat-mdc-input-element {
+  color: #ffffff !important;
+  caret-color: var(--admin-accent);
+}
+
+.mat-mdc-form-field .mat-mdc-input-element::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.mat-mdc-form-field:not(.mat-form-field-disabled) .mdc-floating-label,
+.mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label {
+  color: var(--admin-muted) !important;
+}
+
+.mat-mdc-form-field.mat-focused:not(.mat-form-field-disabled) .mdc-floating-label,
+.mat-mdc-form-field.mat-focused:not(.mat-form-field-disabled) .mat-mdc-floating-label {
+  color: var(--admin-accent) !important;
+}
+
+.mat-mdc-form-field.mat-form-field-invalid .mdc-floating-label,
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-floating-label {
+  color: var(--admin-danger) !important;
+}
+
+.mat-mdc-form-field .mat-mdc-form-field-error {
+  color: var(--admin-danger);
+}
+
+.mat-mdc-table {
+  background: transparent !important;
+}
+
+.mat-mdc-header-row,
+.mat-mdc-header-cell {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: var(--admin-muted) !important;
+  font-weight: 600 !important;
+  font-size: 0.72rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom-color: var(--admin-border) !important;
+  color: var(--admin-text);
+}
+
+/* Valeur affichée du mat-select (formulaire agence, paginator, dialogs) */
+.mat-mdc-select,
+.mat-mdc-select-trigger {
+  color: var(--admin-text) !important;
+}
+
+.mat-mdc-select-value,
+.mat-mdc-select-value-text,
+.mat-mdc-select-min-line {
+  color: var(--admin-text) !important;
+}
+
+.mat-mdc-select-arrow {
+  color: var(--admin-muted) !important;
+}
+
+/* Panneau déroulant (overlay) : fond sombre + texte clair */
+.mat-mdc-select-panel,
+.cdk-overlay-pane .mat-mdc-select-panel {
+  background: var(--admin-surface-2) !important;
+  border: 1px solid var(--admin-border);
+  border-radius: 12px !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45) !important;
+}
+
+.mat-mdc-option {
+  --mat-option-label-text-color: var(--admin-text);
+  --mat-option-hover-state-layer-color: rgba(255, 255, 255, 0.08);
+  --mat-option-focus-state-layer-color: rgba(255, 255, 255, 0.06);
+  --mat-option-selected-state-layer-color: var(--admin-accent-dim);
+  color: var(--admin-text) !important;
+  background-color: transparent !important;
+}
+
+.mat-mdc-option .mdc-list-item__primary-text {
+  color: var(--admin-text) !important;
+}
+
+.mat-mdc-option.mat-mdc-option-active:not(.mdc-list-item--disabled) {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background: var(--admin-accent-dim) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: var(--admin-accent) !important;
+}
+
+/* Paginator : libellés, icônes, select « items per page » */
+.mat-mdc-paginator {
+  --mat-paginator-container-text-color: var(--admin-text);
+  --mat-paginator-enabled-icon-color: var(--admin-text);
+  --mat-paginator-disabled-icon-color: rgba(255, 255, 255, 0.28);
+  background: transparent !important;
+  color: var(--admin-text);
+  border-top: 1px solid var(--admin-border);
+}
+
+.mat-mdc-paginator-container {
+  color: var(--admin-text);
+}
+
+.mat-mdc-paginator-page-size-label,
+.mat-mdc-paginator-range-label {
+  color: var(--admin-muted) !important;
+}
+
+.mat-mdc-paginator .mat-mdc-icon-button {
+  color: var(--admin-text) !important;
+}
+
+.mat-mdc-paginator .mat-mdc-icon-button[disabled] {
+  color: rgba(255, 255, 255, 0.28) !important;
+}
+
+.mat-mdc-paginator .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.mat-mdc-paginator .mat-mdc-text-field-wrapper {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-radius: 8px;
+}
+
+.mat-mdc-paginator .mat-mdc-select-value-text {
+  color: var(--admin-text) !important;
+}
+
+.mat-mdc-paginator .mdc-notched-outline .mdc-notched-outline__leading,
+.mat-mdc-paginator .mdc-notched-outline .mdc-notched-outline__notch,
+.mat-mdc-paginator .mdc-notched-outline .mdc-notched-outline__trailing {
+  border-color: var(--admin-border) !important;
+}
+
+/* Dialogues (Nouveau forfait, affectation abonnement, etc.) : fond noir comme le shell */
+.admin-dialog-panel .mat-mdc-dialog-container {
+  --mat-dialog-container-color: var(--admin-bg);
+  --mdc-dialog-container-color: var(--admin-bg);
+  border-radius: 16px !important;
+  border: 1px solid var(--admin-border);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.65) !important;
+  color: var(--admin-text) !important;
+}
+
+.admin-dialog-panel .mdc-dialog__surface {
+  background: var(--admin-bg) !important;
+  color: var(--admin-text) !important;
+}
+
+.admin-dialog-panel .mat-mdc-dialog-title {
+  color: var(--admin-text) !important;
+  font-family: var(--admin-font-display);
+}
+
+.admin-dialog-panel .mat-mdc-dialog-content {
+  color: var(--admin-text) !important;
+}
+
+.admin-dialog-panel .mat-mdc-dialog-actions {
+  border-top: 1px solid var(--admin-border);
+  padding-top: 0.5rem !important;
+}
+
+.admin-dialog-panel .mat-mdc-form-field-hint,
+.admin-dialog-panel .mat-mdc-form-field-hint-wrapper,
+.admin-dialog-panel mat-hint {
+  color: var(--admin-muted) !important;
+}
+
+.admin-dialog-panel .mat-mdc-slide-toggle .mdc-label {
+  color: var(--admin-text) !important;
+}
+
+/* Champs date natifs : calendrier système cohérent avec le thème sombre */
+.admin-dialog-panel input[type='date'] {
+  color-scheme: dark;
+}
+
+.admin-snack-error {
+  --mat-snack-bar-button-color: #fecaca;
+  background: #7f1d1d !important;
+  color: #fff !important;
+}
