@@ -1,11 +1,12 @@
-# Railway deploy: Node serves the built Angular app (no Docker, no Nginx)
-# Set "Root Directory" to omra-front in Railway dashboard if repo root is parent.
+# Déploiement Railway — root du service = ce dossier (omra-super-admin).
+# Si le dashboard Railway a un « Custom Build Command » ou « Custom Start Command », les vider
+# pour que ce fichier s’applique (sinon ils écrasent build/start et cassent le déploiement).
 
 [build]
 builder = "nixpacks"
-buildCommand = "npm run build"
+buildCommand = "unset NPM_CONFIG_PRODUCTION; export NODE_OPTIONS='--max-old-space-size=4096'; npm run build"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "node server.js"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
