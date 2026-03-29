@@ -1,17 +1,16 @@
 # Nixpacks pour Railway (Angular CLI : Node récent recommandé)
 # Archive nixpkgs figée pour une version Node stable (évite les rejets de version par le CLI).
 #
-# Railway peut définir NPM_CONFIG_PRODUCTION / l’ancien flag « production » → avertissement npm
-# et omission des devDependencies. On force l’install complète pour le build Angular.
-
-[variables]
-NPM_CONFIG_PRODUCTION = "false"
+# Railway injecte souvent NPM_CONFIG_PRODUCTION : npm 10+ affiche un warn déprécié (parfois loggé « error »).
+# Ne pas définir NPM_CONFIG_PRODUCTION ici (même "false" déclenche le warn). Unset avant chaque npm.
 
 [phases.setup]
 nixpkgsArchive = "51ad838b03a05b1de6f9f2a0fffecee64a9788ee"
 
 [phases.install]
-cmds = ["npm ci --include=dev"]
+cmds = ["unset NPM_CONFIG_PRODUCTION; npm ci --include=dev"]
 
 [phases.build]
-cmds = ["export NODE_OPTIONS='--max-old-space-size=4096' && npm run build"]
+cmds = [
+  "unset NPM_CONFIG_PRODUCTION; export NODE_OPTIONS='--max-old-space-size=4096'; npm run build",
+]
