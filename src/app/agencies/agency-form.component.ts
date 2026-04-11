@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,6 +10,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../core/api.service';
 import { NotificationService } from '../core/notification.service';
+import {
+  AGENCY_COUNTRIES,
+  AGENCY_CURRENCIES,
+  flagEmoji,
+} from './agency-locale-options';
 
 @Component({
   selector: 'admin-omra-agency-form',
@@ -17,6 +22,7 @@ import { NotificationService } from '../core/notification.service';
   imports: [
     RouterLink,
     ReactiveFormsModule,
+    FormsModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -38,11 +44,61 @@ export class AgencyFormComponent implements OnInit {
   loading = false;
   isEdit = false;
   agencyId: number | null = null;
+
+  readonly flagEmoji = flagEmoji;
+  readonly countries = AGENCY_COUNTRIES;
+  readonly currencies = AGENCY_CURRENCIES;
+  /** Si l’API renvoie un code / libellé hors liste, on l’affiche quand même. */
+  countrySelectOptions: { code: string; nameFr: string }[] = AGENCY_COUNTRIES;
+  currencySelectOptions: { code: string; labelFr: string }[] = AGENCY_CURRENCIES;
+
+  /** Filtre saisi dans le panneau du select (pas lié au FormGroup). */
+  countryFilter = '';
+  currencyFilter = '';
+
+  get filteredCountryOptions(): { code: string; nameFr: string }[] {
+    const q = this.countryFilter.trim().toLowerCase();
+    if (!q) return this.countrySelectOptions;
+    return this.countrySelectOptions.filter(
+      (c) => c.nameFr.toLowerCase().includes(q) || c.code.toLowerCase().includes(q),
+    );
+  }
+
+  get filteredCurrencyOptions(): { code: string; labelFr: string }[] {
+    const q = this.currencyFilter.trim().toLowerCase();
+    if (!q) return this.currencySelectOptions;
+    return this.currencySelectOptions.filter(
+      (x) =>
+        x.labelFr.toLowerCase().includes(q) || x.code.toLowerCase().includes(q),
+    );
+  }
+
+  countryLabel(code: string | null | undefined): string {
+    if (code == null || code === '') return '';
+    const row = this.countrySelectOptions.find((c) => c.code === code);
+    return row?.nameFr ?? code;
+  }
+
+  currencyLabel(code: string | null | undefined): string {
+    if (code == null || code === '') return '';
+    const row = this.currencySelectOptions.find((c) => c.code === code);
+    return row?.labelFr ?? code;
+  }
+
+  onCountryPanelToggle(open: boolean): void {
+    if (open) this.countryFilter = '';
+  }
+
+  onCurrencyPanelToggle(open: boolean): void {
+    if (open) this.currencyFilter = '';
+  }
+
   form: FormGroup = this.fb.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     phone: [''],
     country: [''],
+    currency: ['MAD'],
     city: [''],
     address: [''],
     status: ['ACTIVE'],
@@ -66,17 +122,31 @@ export class AgencyFormComponent implements OnInit {
         email?: string;
         phone?: string;
         country?: string;
+        currency?: string;
         city?: string;
         address?: string;
         status?: string;
       }>(this.api.agencies.byId(this.agencyId))
       .subscribe({
         next: (res) => {
+          const c = (res.country ?? '').trim();
+          if (c && !AGENCY_COUNTRIES.some((x) => x.code === c)) {
+            this.countrySelectOptions = [{ code: c, nameFr: c }, ...AGENCY_COUNTRIES];
+          } else {
+            this.countrySelectOptions = AGENCY_COUNTRIES;
+          }
+          const cur = (res.currency ?? '').trim();
+          if (cur && !AGENCY_CURRENCIES.some((x) => x.code === cur)) {
+            this.currencySelectOptions = [{ code: cur, labelFr: cur }, ...AGENCY_CURRENCIES];
+          } else {
+            this.currencySelectOptions = AGENCY_CURRENCIES;
+          }
           this.form.patchValue({
             name: res.name ?? '',
             email: res.email ?? '',
             phone: res.phone ?? '',
-            country: res.country ?? '',
+            country: c,
+            currency: cur || 'MAD',
             city: res.city ?? '',
             address: res.address ?? '',
             status: res.status ?? 'ACTIVE',
@@ -100,6 +170,7 @@ export class AgencyFormComponent implements OnInit {
       email: v.email,
       phone: v.phone || undefined,
       country: v.country || undefined,
+      currency: v.currency || undefined,
       city: v.city || undefined,
       address: v.address || undefined,
       status: v.status || 'ACTIVE',

@@ -20,6 +20,7 @@ import {
   EditSubscriptionDialogData,
   EditSubscriptionDialogResult,
 } from './edit-subscription-dialog.component';
+import { AGENCY_COUNTRIES, flagEmoji } from './agency-locale-options';
 
 interface AgencyDto {
   id: number;
@@ -27,6 +28,7 @@ interface AgencyDto {
   email: string;
   phone?: string;
   country?: string;
+  currency?: string;
   city?: string;
   address?: string;
   status: string;
@@ -199,6 +201,16 @@ export class AgencyDetailComponent implements OnInit {
     this.loadUsers();
   }
 
+  countryFlag(code?: string | null): string {
+    return flagEmoji(code ?? '');
+  }
+
+  countryLabel(code?: string | null): string {
+    if (!code) return '—';
+    const f = AGENCY_COUNTRIES.find((c) => c.code === code);
+    return f ? f.nameFr : code;
+  }
+
   statusLabel(s: string): string {
     const m: Record<string, string> = { ACTIVE: 'Actif', SUSPENDED: 'Suspendu', EXPIRED: 'Expiré' };
     return m[s] ?? s;
@@ -220,9 +232,10 @@ export class AgencyDetailComponent implements OnInit {
   }
 
   formatMoney(v: number | string | undefined | null): string {
-    if (v == null) return '0 MAD';
+    const cur = this.agency?.currency ?? 'MAD';
+    if (v == null) return `0 ${cur}`;
     const n = typeof v === 'number' ? v : Number(v);
-    return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(n) + ' MAD';
+    return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(n) + ' ' + cur;
   }
 
   subStatusLabel(s: string): string {

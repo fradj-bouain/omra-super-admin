@@ -53,3 +53,78 @@
   gap: 0.5rem;
   margin-top: 1rem;
 }
+
+.opt-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.opt-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+  /* Windows: éviter l’affichage en « deux lettres » (indicateurs régionaux) au lieu du drapeau */
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+  font-variant-emoji: emoji;
+}
+
+.trigger-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trigger-row--currency {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trigger-placeholder {
+  color: color-mix(in srgb, var(--admin-text, #1a1a1a) 55%, transparent);
+  font-weight: 400;
+}
+
+.select-filter-option {
+  cursor: default !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  height: auto !important;
+  min-height: 3rem;
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+}
+
+.select-filter-input {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--admin-text, #1a1a1a) 18%, transparent);
+  border-radius: 6px;
+  font: inherit;
+  background: var(--admin-surface-elevated, #fff);
+}
+
+.select-filter-input:focus {
+  outline: 2px solid color-mix(in srgb, var(--admin-accent, #1565c0) 45%, transparent);
+  outline-offset: 0;
+}
+
+.opt-code {
+  margin-left: auto;
+  font-size: 0.75rem;
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+}

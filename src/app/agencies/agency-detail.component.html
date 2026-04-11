@@ -8,7 +8,22 @@
         Agences
       </a>
       <h1>{{ agency.name }}</h1>
-      <p class="lead">{{ agency.email }} · {{ agency.city || '—' }} · {{ statusLabel(agency.status) }}</p>
+      <p class="lead">
+        @if (countryFlag(agency.country)) {
+          <span class="lead-flag" aria-hidden="true">{{ countryFlag(agency.country) }}</span>
+        }
+        <span>{{ agency.email }}</span>
+        <span class="lead-sep">·</span>
+        <span>{{ countryLabel(agency.country) }}</span>
+        @if (agency.currency) {
+          <span class="lead-sep">·</span>
+          <span class="lead-currency">{{ agency.currency }}</span>
+        }
+        <span class="lead-sep">·</span>
+        <span>{{ agency.city || '—' }}</span>
+        <span class="lead-sep">·</span>
+        <span>{{ statusLabel(agency.status) }}</span>
+      </p>
     </div>
     <div class="head__actions">
       <a mat-stroked-button [routerLink]="['/agencies', agency.id, 'edit']">
