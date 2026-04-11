@@ -55,6 +55,11 @@ export class PlanFormDialogComponent implements OnInit {
     billingPeriod: [this.data.plan?.billingPeriod ?? 'YEARLY', Validators.required],
     defaultDurationDays: [this.data.plan?.defaultDurationDays != null ? String(this.data.plan.defaultDurationDays) : '365'],
     maxUsers: [this.data.plan?.maxUsers != null ? String(this.data.plan.maxUsers) : ''],
+    maxSubAgencies: [
+      this.data.plan?.maxSubAgencies != null && this.data.plan.maxSubAgencies !== undefined
+        ? String(this.data.plan.maxSubAgencies)
+        : '',
+    ],
     features: [this.data.plan?.features ?? ''],
     active: [this.data.plan?.active ?? true],
     sortOrder: [this.data.plan != null ? String(this.data.plan.sortOrder) : '10'],
@@ -97,6 +102,7 @@ export class PlanFormDialogComponent implements OnInit {
       billingPeriod: raw.billingPeriod,
       defaultDurationDays: raw.defaultDurationDays ? Number(raw.defaultDurationDays) : undefined,
       maxUsers: raw.maxUsers ? Number(raw.maxUsers) : undefined,
+      maxSubAgencies: raw.maxSubAgencies !== '' && raw.maxSubAgencies != null ? Number(raw.maxSubAgencies) : undefined,
       features: raw.features?.trim() || undefined,
       active: raw.active,
       sortOrder: raw.sortOrder ? Number(raw.sortOrder) : 0,

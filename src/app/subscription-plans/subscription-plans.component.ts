@@ -21,6 +21,8 @@ export interface SubscriptionPlanRow {
   billingPeriod: string;
   defaultDurationDays?: number;
   maxUsers?: number;
+  /** Max active sub-agencies for main agency; null = unlimited */
+  maxSubAgencies?: number | null;
   active: boolean;
   sortOrder: number;
 }
@@ -40,7 +42,7 @@ export class SubscriptionPlansComponent implements OnInit {
 
   plans: SubscriptionPlanRow[] = [];
   loading = false;
-  displayedColumns = ['code', 'name', 'price', 'billing', 'duration', 'active', 'actions'];
+  displayedColumns = ['code', 'name', 'price', 'billing', 'duration', 'maxSubAgencies', 'active', 'actions'];
 
   ngOnInit(): void {
     this.load();
