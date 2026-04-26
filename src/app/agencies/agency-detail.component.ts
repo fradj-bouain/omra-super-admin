@@ -32,6 +32,7 @@ interface AgencyDto {
   city?: string;
   address?: string;
   status: string;
+  agencyKind?: string;
   subscriptionPlan?: string;
   subscriptionStartDate?: string;
   subscriptionEndDate?: string;
@@ -214,6 +215,16 @@ export class AgencyDetailComponent implements OnInit {
   statusLabel(s: string): string {
     const m: Record<string, string> = { ACTIVE: 'Actif', SUSPENDED: 'Suspendu', EXPIRED: 'Expiré' };
     return m[s] ?? s;
+  }
+
+  agencyKindLabel(kind?: string | null): string {
+    const m: Record<string, string> = {
+      TRAVEL: 'Voyage',
+      MARKETPLACE: 'Marketplace',
+      HOTEL: 'Hôtel',
+    };
+    const k = kind === 'MARKETPLACE' || kind === 'HOTEL' ? kind : 'TRAVEL';
+    return m[k] ?? k;
   }
 
   userStatusLabel(s: string): string {

@@ -18,6 +18,10 @@
           <a [routerLink]="['/agencies', row.id]" class="cell-link">{{ row.name }}</a>
         </td>
       </ng-container>
+      <ng-container matColumnDef="kind">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let row">{{ kindLabel(row.agencyKind) }}</td>
+      </ng-container>
       <ng-container matColumnDef="email">
         <th mat-header-cell *matHeaderCellDef>Email</th>
         <td mat-cell *matCellDef="let row">{{ row.email }}</td>

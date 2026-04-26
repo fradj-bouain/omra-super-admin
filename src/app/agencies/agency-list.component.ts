@@ -17,6 +17,7 @@ interface AgencyRow {
   phone?: string;
   city?: string;
   status: string;
+  agencyKind?: string;
 }
 
 interface PageResponse<T> {
@@ -47,7 +48,7 @@ export class AgencyListComponent implements OnInit {
   private notif = inject(NotificationService);
 
   dataSource = new MatTableDataSource<AgencyRow>([]);
-  displayedColumns = ['name', 'email', 'city', 'status', 'actions'];
+  displayedColumns = ['name', 'kind', 'email', 'city', 'status', 'actions'];
   totalElements = 0;
   page = 1;
   size = 20;
@@ -89,5 +90,15 @@ export class AgencyListComponent implements OnInit {
       EXPIRED: 'Expiré',
     };
     return m[status] ?? status;
+  }
+
+  kindLabel(kind: string | null | undefined): string {
+    const m: Record<string, string> = {
+      TRAVEL: 'Voyage',
+      MARKETPLACE: 'Marketplace',
+      HOTEL: 'Hôtel',
+    };
+    const k = kind === 'MARKETPLACE' || kind === 'HOTEL' ? kind : 'TRAVEL';
+    return m[k] ?? k;
   }
 }

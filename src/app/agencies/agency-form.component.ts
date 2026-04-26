@@ -93,6 +93,13 @@ export class AgencyFormComponent implements OnInit {
     if (open) this.currencyFilter = '';
   }
 
+  /** Aligné sur l’enum Spring {@code AgencyKind}. */
+  readonly agencyKinds: { value: string; label: string; hint: string }[] = [
+    { value: 'TRAVEL', label: 'Agence voyage (Omra)', hint: 'Voyageurs, groupes, logistique classique.' },
+    { value: 'MARKETPLACE', label: 'Marketplace / boutique', hint: 'Catalogue, commandes, stock (portail boutique).' },
+    { value: 'HOTEL', label: 'Opérateur hôtelier', hint: 'Établissements et offres tarifaires.' },
+  ];
+
   form: FormGroup = this.fb.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
@@ -102,6 +109,7 @@ export class AgencyFormComponent implements OnInit {
     city: [''],
     address: [''],
     status: ['ACTIVE'],
+    agencyKind: ['TRAVEL'],
   });
 
   ngOnInit(): void {
@@ -126,6 +134,7 @@ export class AgencyFormComponent implements OnInit {
         city?: string;
         address?: string;
         status?: string;
+        agencyKind?: string;
       }>(this.api.agencies.byId(this.agencyId))
       .subscribe({
         next: (res) => {
@@ -141,6 +150,7 @@ export class AgencyFormComponent implements OnInit {
           } else {
             this.currencySelectOptions = AGENCY_CURRENCIES;
           }
+          const kind = res.agencyKind === 'MARKETPLACE' || res.agencyKind === 'HOTEL' ? res.agencyKind : 'TRAVEL';
           this.form.patchValue({
             name: res.name ?? '',
             email: res.email ?? '',
@@ -150,6 +160,7 @@ export class AgencyFormComponent implements OnInit {
             city: res.city ?? '',
             address: res.address ?? '',
             status: res.status ?? 'ACTIVE',
+            agencyKind: kind,
           });
           this.loading = false;
         },
@@ -174,6 +185,7 @@ export class AgencyFormComponent implements OnInit {
       city: v.city || undefined,
       address: v.address || undefined,
       status: v.status || 'ACTIVE',
+      agencyKind: v.agencyKind || 'TRAVEL',
     };
     if (this.isEdit && this.agencyId != null) {
       this.http.put(this.api.agencies.byId(this.agencyId), body).subscribe({

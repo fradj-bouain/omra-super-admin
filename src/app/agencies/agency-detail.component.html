@@ -23,6 +23,8 @@
         <span>{{ agency.city || '—' }}</span>
         <span class="lead-sep">·</span>
         <span>{{ statusLabel(agency.status) }}</span>
+        <span class="lead-sep">·</span>
+        <span class="lead-kind">{{ agencyKindLabel(agency.agencyKind) }}</span>
       </p>
     </div>
     <div class="head__actions">

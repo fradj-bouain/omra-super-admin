@@ -20,6 +20,19 @@
           <mat-error>Email valide requis</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Type d’agence</mat-label>
+          <mat-select formControlName="agencyKind">
+            @for (k of agencyKinds; track k.value) {
+              <mat-option [value]="k.value">
+                <span class="kind-opt">{{ k.label }}</span>
+              </mat-option>
+            }
+          </mat-select>
+          <mat-hint
+            >Profil métier : menu et modules disponibles pour cette agence (modifiable ici en super-admin).</mat-hint
+          >
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="span-2">
           <mat-label>Téléphone</mat-label>
           <input matInput formControlName="phone" />
         </mat-form-field>
