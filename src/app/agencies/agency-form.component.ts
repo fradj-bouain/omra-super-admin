@@ -98,6 +98,11 @@ export class AgencyFormComponent implements OnInit {
     { value: 'TRAVEL', label: 'Agence voyage (Omra)', hint: 'Voyageurs, groupes, logistique classique.' },
     { value: 'MARKETPLACE', label: 'Marketplace / boutique', hint: 'Catalogue, commandes, stock (portail boutique).' },
     { value: 'HOTEL', label: 'Opérateur hôtelier', hint: 'Établissements et offres tarifaires.' },
+    {
+      value: 'TRANSPORT',
+      label: 'Transporteur',
+      hint: 'Flotte (bus, voitures), offres à la journée / heure / trajet.',
+    },
   ];
 
   form: FormGroup = this.fb.group({
@@ -150,7 +155,10 @@ export class AgencyFormComponent implements OnInit {
           } else {
             this.currencySelectOptions = AGENCY_CURRENCIES;
           }
-          const kind = res.agencyKind === 'MARKETPLACE' || res.agencyKind === 'HOTEL' ? res.agencyKind : 'TRAVEL';
+          const kind =
+            res.agencyKind === 'MARKETPLACE' || res.agencyKind === 'HOTEL' || res.agencyKind === 'TRANSPORT'
+              ? res.agencyKind
+              : 'TRAVEL';
           this.form.patchValue({
             name: res.name ?? '',
             email: res.email ?? '',

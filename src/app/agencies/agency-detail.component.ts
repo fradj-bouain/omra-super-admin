@@ -222,8 +222,10 @@ export class AgencyDetailComponent implements OnInit {
       TRAVEL: 'Voyage',
       MARKETPLACE: 'Marketplace',
       HOTEL: 'Hôtel',
+      TRANSPORT: 'Transport',
     };
-    const k = kind === 'MARKETPLACE' || kind === 'HOTEL' ? kind : 'TRAVEL';
+    const k =
+      kind === 'MARKETPLACE' || kind === 'HOTEL' || kind === 'TRANSPORT' ? kind : 'TRAVEL';
     return m[k] ?? k;
   }
 
